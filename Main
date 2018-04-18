@@ -1,0 +1,109 @@
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
+
+public class TaskA3 {
+
+    public static void main(String[] args) throws IOException {
+        int actualWind = 0;
+        int actualSolar = 0;
+        int actualOthers = 0;
+
+        int forecastWind = 0;
+        int forecastSolar = 0;
+        int forecastOthers = 0;
+
+        Document document = Jsoup.connect("http://www.mercado.ren.pt/EN/Electr/MarketInfo/Gen/Pages/Forecast.aspx").get();
+
+        Element table = document.select("table").first(); // find the first table in html
+
+        Elements rows = table.select("tr");// select rows
+
+
+        for (int i = 28; i < rows.size() - 36; i++) {
+            Element row = rows.get(i);
+            Elements cols = row.select("td");
+
+
+
+            if (cols.get(1).hasAttr("class")) {
+                int b = Integer.valueOf(cols.get(1).text());
+                forecastWind += b;
+            }
+            else {
+                int b = Integer.valueOf(cols.get(1).text());
+                actualWind += b;
+            }
+            if (cols.get(2).hasAttr("class")) {
+                int b = Integer.valueOf(cols.get(2).text());
+                forecastSolar += b;
+            }
+            else {
+                int b = Integer.valueOf(cols.get(2).text());
+                actualSolar += b;
+            }
+
+            if (cols.get(3).hasAttr("class")) {
+                int b = Integer.valueOf(cols.get(3).text());
+                forecastOthers += b;
+            }
+            else {
+                int b = Integer.valueOf(cols.get(3).text());
+                actualOthers += b;
+            }
+        }
+
+
+        for (int i = 55; i < rows.size() - 9; i++) {
+            Element row = rows.get(i);
+            Elements cols = row.select("td");// select cols
+
+
+
+            if (cols.get(0).hasAttr("class")) {
+                int b = Integer.valueOf(cols.get(0).text());
+                forecastWind += b;
+            }
+            else {
+                int b = Integer.valueOf(cols.get(0).text());
+                actualWind += b;
+            }
+            if (cols.get(1).hasAttr("class")) {
+                int b = Integer.valueOf(cols.get(1).text());
+                forecastSolar += b;
+            }
+            else {
+                int b = Integer.valueOf(cols.get(1).text());
+                actualSolar += b;
+            }
+
+            if (cols.get(2).hasAttr("class")) {
+                int b = Integer.valueOf(cols.get(2).text());
+                forecastOthers += b;
+            }
+            else {
+                int b = Integer.valueOf(cols.get(2).text());
+                actualOthers += b;
+            }
+        }
+
+
+
+
+
+        System.out.println("Actual: HH Wind: <" + actualWind + "> Solar: <" + actualSolar + "> Others: <" + actualOthers + ">");
+        System.out.println("Forecast: HH Wind: <" + forecastWind + "> Solar: <" + forecastSolar + "> Others: <" + forecastOthers + ">");
+
+    }
+}
+
+//Actual: HH Wind:<amount of energy created from "Wind"> Solar:<amount of energy created from "Solar"> Others:<amount of energy created from "Others">
+//Forecast: HH Wind:<amount of energy created from "Wind"> Solar:<amount of energy created from "Solar"> Others:<amount of energy created from "Others">
+
+
+
+
+
